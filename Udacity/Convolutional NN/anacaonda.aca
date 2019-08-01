@@ -1,0 +1,65 @@
+conda COMMAND OPTIONS --SWITCH
+
+conda --help
+
+conda install 'PACKAGE MAJOR.MINOR.PATCH'
+	@ conda install foo-lib=12.3
+	@ conda install 'bar-lib>=1.3.4,<1.1'
+	# package can use compatible versions
+	@ conda install --channel MY_CHANNEL PACKAGE
+
+conda list 
+	# list of packages
+
+conda update PACKAGE
+
+conda remove PACKAGE
+
+conda search
+
+conda search PACKAGE --list
+
+	# channels : A Conda channel is an identifier of a path (e.g., as in a web address) from which Conda packages can be obtained
+	
+conda search -c 
+
+	@ conda search -c conda-forge -c sseefeld -c gbrener --platform win-64 textadapter
+	
+	
+anaconda search PACKAGE
+
+	# environments allow multiple incompatible versions of the same (software) package to coexist on your system
+	
+conda env list
+
+conda list 'PACKAGE1|PACKAGE2'
+
+conda list --name ENVIRONMENT 'PACKAGE1|PACKAGE2'
+
+	# lists the package1 and package2 in environment without going to that environment
+	
+conda activate ENVIRONMENT
+conda deactivate
+
+conda env remove --name ENVIRONMENT
+
+	# remove an environment
+	
+	@ conda create --name recent-pd python=3.6 pandas=0.22 scipy statsmodels
+
+conda create --name ENVIRONMENT LIBRARY1 PACKAGE1 PACKAGE2
+
+	@ environment.yml
+	# for keeping the environment data
+	
+conda env export --file ENVIRONMENTFILE.yml
+	
+	@ conda env export --name course-env --file course-env.yml
+	@conda env create --file file-name.yml
+
+conda env create --file ENVIRONMENTFILE.yml
+
+cat FILE.py
+python FILE.py
+
+	# print the file, run the file with python
