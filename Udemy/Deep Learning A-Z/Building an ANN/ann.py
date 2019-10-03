@@ -43,13 +43,21 @@ X = X[:, 1:]
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
 
-categorical_features = [1, 2]
+categorical_features = [1]
+label_features = [2]
 numerical_features = list (range(3,11))
+
 categorical_transformer = Pipeline(steps=[('onehot', OneHotEncoder(handle_unknown='ignore'))])
+label_transformer = Pipeline(steps=[('labeler', LabelEncoder())])
+numerical_transformer = Pipeline(steps=[('numerical', StandardScaler())])
 
 preprocess = ColumnTransformer(transformers=[
-        ('cat', categorical_transformer, categorical_features)])
+        ('cat', categorical_transformer, categorical_features),
+        ('label', label_transformer, label_features),
+        ])
 
     # DeprecationWarning: `make_column_transformer` now expects (transformer, columns) as input tuples instead of (columns, transformer).
     # https://towardsdatascience.com/preprocessing-with-sklearn-a-complete-and-comprehensive-guide-670cb98fcfb9
@@ -63,7 +71,6 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, rando
 
 # Feature Scaling
 from sklearn.preprocessing import StandardScaler
-sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
