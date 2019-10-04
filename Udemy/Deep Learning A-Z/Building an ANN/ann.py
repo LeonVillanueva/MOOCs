@@ -63,7 +63,7 @@ preprocess = ColumnTransformer(transformers=[
     # https://towardsdatascience.com/preprocessing-with-sklearn-a-complete-and-comprehensive-guide-670cb98fcfb9
 
 Xp = None
-Xp = preprocess.fit_transform(Xc)
+#Xp = preprocess.fit_transform(Xc)
 
 # Splitting the dataset into the Training set and Test set
 from sklearn.model_selection import train_test_split
@@ -78,7 +78,7 @@ X_test = sc.transform(X_test)
 
 # Importing the Keras libraries and packages
 import keras
-from keras.models import Sequential
+from keras.models import Sequential # required for initialization
 from keras.layers import Dense
 
 # Initialising the ANN
@@ -108,3 +108,22 @@ y_pred = (y_pred > 0.5)
 # Making the Confusion Matrix
 from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, y_pred)
+
+'''
+    Geography: France
+    Credit Score: 600
+    Gender: Male
+    Age: 40 years old
+    Tenure: 3 years
+    Balance: $60000
+    Number of Products: 2
+    Does this customer have a credit card ? Yes
+    Is this customer an Active Member: Yes
+    Estimated Salary: $50000
+'''
+
+customer = sc.fit_transform (np.array ([[0, 0, 600, 1, 40, 3, 60000, 2, 1, 1, 50000]]))
+    #input must always have same input transformations
+customer_pred = classifier.predict (customer)
+
+print (customer_pred)
