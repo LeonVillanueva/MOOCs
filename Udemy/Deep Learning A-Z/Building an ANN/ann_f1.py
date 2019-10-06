@@ -152,28 +152,29 @@ print (mean, variance)
 # regularization and DropOut
 # GridSearchCV
 
-from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import GridSearchCV
-from keras.models import Sequential
-from keras.layers import Dense
-def g_classifier(optimizer):
+
+def grid_classifier (optimizer):
     classifier = Sequential()
     classifier.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 'relu', input_dim = 11))
-    classifier.add(Dropout(0.2))
+    classifier.add(Dropout(0.20))
     classifier.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 'relu'))
-    classifier.add(Dropout(0.2))
+    classifier.add(Dropout(0.20))
     classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
     classifier.compile(optimizer = optimizer, loss = 'binary_crossentropy', metrics = ['accuracy'])
-    return classifier
-classifier = KerasClassifier(build_fn = g_classifier)
-parameters = {'batch_size': [16, 32],
-              'epochs': [100, 200],
+
+classifier = KerasClassifier (build_fn=grid_classifier)
+
+parameters = {'batch_size': [16,32], 
+              'epochs': [120, 240],
               'optimizer': ['adam', 'rmsprop']}
-grid_search = GridSearchCV(estimator = classifier,
-                           param_grid = parameters,
-                           scoring = 'accuracy',
-                           cv = 10)
+
+grid_search = GridSearchCV (estimator=classifier,
+                            param_grid = parameters,
+                            scoring='accuracy',
+                            cv=10)
 grid_search = grid_search.fit(X_train, y_train)
+
 #  best paramaters
 
 best_param = grid_search.best_params_
