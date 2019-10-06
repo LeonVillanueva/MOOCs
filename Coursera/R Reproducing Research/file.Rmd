@@ -1,0 +1,208 @@
+ASSIGNMENT 1, Reproducible research
+========================================================
+
+# Reproducible Research: Peer Assessment 1
+
+```{r,echo=FALSE}
+opts_chunk$set(cache = TRUE)
+```
+
+## Loading and preprocessing the data
+
+Code to Process Data
+
+```{r}
+setwd("c:/r/act")
+act<-read.csv("activity.csv", header=TRUE)
+act$date <- as.Date (act$date, format="%Y-%m-%d")
+act$day<-weekdays(as.Date(act$date))
+week <- (unique(act$day))
+int <- (unique(act$interval))
+act$steps <- as.numeric(act$steps)
+```
+
+Here is a summary of the act file and head of act
+
+```{r}
+summary(act)
+head(act,10)
+```
+
+Histogram
+```{r}
+  hist(act$steps[!is.na(act$steps)], main = "Histogram of Steps Taken", xlab = "Steps")
+```
+## What is mean total number of steps taken per day?
+
+```{r by.day, echo=TRUE}
+for (i in 1:length(week))
+
+by.day <- data.frame(matrix(NA, nrow = 7, ncol = 3))
+names(by.day) <- c("day","average","median")
+
+for (i in 1:length(week))
+
+{
+  temp <- subset (act,day==week[i])
+	bd.mean <- mean(temp$steps, na.rm = TRUE)
+	bd.median <- median(temp$steps[temp$steps != 0], na.rm = TRUE)
+
+by.day [i,1] <- week[i]
+by.day [i,2] <- bd.mean
+by.day [i,3] <- bd.median
+}
+
+print(by.day)
+```
+
+## What is the average daily activity pattern?
+
+```{r,cache=TRUE}
+n.per.x <- length ( unique ( act$interval))
+per <- data.frame(matrix(NA, nrow = n.per.x, ncol = 2))
+names(per) <- c("interval","average")
+per$average <- as.numeric (per$average)
+
+for (i in 1:n.per.x)
+
+{
+  temp <- subset (act,interval==int[i])
+	per.mean <- mean(temp$steps, na.rm = TRUE)
+
+per[i,1] <- int[i]
+per[i,2] <- per.mean
+
+}
+
+with(per, plot(per$interval,per$average,col="black",typ="l",ylab="Average # of Steps",xlab="Interval", main = "Average # of Steps by 5 Min Interval"))
+
+max.per <- per$interval[per$average==max(per$average)]
+
+```
+
+The maximum number of steps on average occured at interval
+
+```{r}
+print(max.per)
+```
+
+## Imputing missing values
+
+I will use the daily averages to impute for the NA values.
+
+```{r}
+na.steps <- is.na(act$steps) ; na.amt <- length (na.steps[na.steps == TRUE])
+```
+
+```{r}
+  raw <- data.frame(matrix(NA, nrow = nrow(act), ncol = 2))
+	names(raw) <- c("day","steps")
+	
+	raw$steps <- act$steps
+	raw$day <- act$day
+
+  for (j in 1:length(week)) {
+	
+		raw$steps[is.na(raw$steps) & raw$day == week[j] ] <- by.day$average[by.day$day == week[j] ]
+	
+		}
+		
+
+		after <- raw
+	
+			after$week <- act$day
+			after$date <- act$date
+			after$interval <- act$interval
+
+			#making a weekend vs weekday variable because that's easier
+
+			after$week[after$week == "Saturday" | after$week == "Sunday"] <- "END"
+			after$week[after$week != "END"] <- "WORK"
+
+  summary(after)
+  head(after,10)
+```
+```{r}
+hist(after$steps[!is.na(after$steps)], main = "New Histogram of Steps Taken", xlab = "Steps")
+```
+
+```{r}
+after.by.day <- data.frame(matrix(NA, nrow = 7, ncol = 3))
+names(after.by.day) <- c("day","average","median")
+
+for (i in 1:length(week))
+
+{
+  temp <- after[after$day==week[i],]
+	bd.mean <- mean(temp$steps, na.rm = TRUE)
+	bd.median <- median(temp$steps[temp$steps != 0], na.rm = TRUE)
+
+after.by.day [i,1] <- week[i]
+after.by.day [i,2] <- bd.mean
+after.by.day [i,3] <- bd.median
+}
+
+print(after.by.day)
+```
+
+**Strangely enough there doesn't seem to be any difference with mean but there is an average with the medians**
+
+Just to check if there are indeed no more NAs
+
+```{r}
+print(unique(is.na(after$steps)))
+```
+
+## Are there differences in activity patterns between weekdays and weekends?
+
+```{r}
+weekend <- after[after$week == "END",]
+weekday <- after[after$week == "WORK",]
+```
+First the weekend table
+```{r}
+		we.per.x <- length ( unique (weekend$interval))
+		we.per <- data.frame(matrix(NA, nrow = we.per.x, ncol = 2))
+		names(we.per) <- c("interval","average")
+		we.per$average <- as.numeric (we.per$average)
+
+			for (i in 1:we.per.x)
+
+			{
+			temp <- subset (weekend,interval==int[i])
+			per.mean <- mean(temp$steps, na.rm = TRUE)
+
+			we.per[i,1] <- int[i]
+			we.per[i,2] <- per.mean
+			}
+
+print(summary(weekend,10))
+```
+
+Next the weekday table
+```{r}
+		wd.per.x <- length ( unique (weekday$interval))
+		wd.per <- data.frame(matrix(NA, nrow = wd.per.x, ncol = 2))
+		names(wd.per) <- c("interval","average")
+		wd.per$average <- as.numeric (wd.per$average)
+
+			for (i in 1:wd.per.x)
+
+			{
+			temp <- subset (weekday,interval==int[i])
+			per.mean <- mean(temp$steps, na.rm = TRUE)
+
+			wd.per[i,1] <- int[i]
+			wd.per[i,2] <- per.mean
+			}
+
+print(summary(weekday,10))
+```
+GRAPHS
+```{r}
+par(mfcol=c(2,1))
+with(we.per, plot(we.per$interval,we.per$average,col="red",typ="l",ylab="Average # of Steps",xlab="Interval", main = "WEEKEND: Average # of Steps by 5 Min Interval"));
+with(wd.per, plot(wd.per$interval,wd.per$average,col="green",typ="l",ylab="Average # of Steps",xlab="Interval", main = "WEEKDAY: Average # of Steps by 5 Min Interval"))
+```
+
+**Please note, I don't know lattice, and used this to create panel with base graphics**
