@@ -20,11 +20,12 @@ classifier.add (Convolution2D
                 (filters=32, kernel_size=(3,3), input_shape= (64,64,3), activation='relu' ))
 classifier.add (MaxPooling2D (pool_size=(2,2)))
 
-## classifier.add (Convolution2D (filters=32, kernel_size=(3,3), activation='relu' ))
-## classifier.add (MaxPooling2D (pool_size=(2,2)))
+classifier.add (Convolution2D (filters=32, kernel_size=(3,3), activation='relu' ))
+classifier.add (MaxPooling2D (pool_size=(2,2)))
 
 classifier.add(Flatten()) # 1-dimensional vector
 
+classifier.add(Dropout(0.1))
 classifier.add(Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu'))
 classifier.add(Dropout(0.1))
 classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
@@ -34,7 +35,8 @@ train_datagen = ImageDataGenerator(
         rescale=1./255,
         shear_range=0.2,
         zoom_range=0.2,
-        horizontal_flip=True)
+        horizontal_flip=True
+        vertical_flip=True)
 
 test_datagen = ImageDataGenerator(rescale=1./255)
 
@@ -52,7 +54,7 @@ test_generator = test_datagen.flow_from_directory(
 
 model.fit_generator(
         train_generator,
-        steps_per_epoch=640,
+        steps_per_epoch=6400,
         epochs=32,
         validation_data=test_generator,
-        validation_steps=640)
+        validation_steps=1600)
