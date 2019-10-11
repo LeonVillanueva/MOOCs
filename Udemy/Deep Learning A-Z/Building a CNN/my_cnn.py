@@ -29,3 +29,30 @@ classifier.add(Dense(units = 128, kernel_initializer = 'uniform', activation = '
 classifier.add(Dropout(0.1))
 classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
 classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+
+train_datagen = ImageDataGenerator(
+        rescale=1./255,
+        shear_range=0.2,
+        zoom_range=0.2,
+        horizontal_flip=True)
+
+test_datagen = ImageDataGenerator(rescale=1./255)
+
+train_generator = train_datagen.flow_from_directory(
+        'dataset/training_set',
+        target_size=(64, 64),
+        batch_size=32,
+        class_mode='binary')
+
+test_generator = test_datagen.flow_from_directory(
+        'dataset/test_set',
+        target_size=(64, 64),
+        batch_size=32,
+        class_mode='binary')
+
+model.fit_generator(
+        train_generator,
+        steps_per_epoch=640,
+        epochs=32,
+        validation_data=test_generator,
+        validation_steps=640)
