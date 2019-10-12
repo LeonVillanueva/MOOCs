@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 """
 Created on Wed Oct  9 18:09:02 2019
-
 @author: FartherSkies
 """
 
@@ -11,6 +9,7 @@ from keras.layers import MaxPooling2D
 from keras.layers import Flatten
 from keras.layers import Dense
 from keras.layers import Dropout
+from keras.preprocessing.image import ImageDataGenerator
 
 classifier = Sequential ()
 
@@ -35,7 +34,7 @@ train_datagen = ImageDataGenerator(
         rescale=1./255,
         shear_range=0.2,
         zoom_range=0.2,
-        horizontal_flip=True
+        horizontal_flip=True,
         vertical_flip=True)
 
 test_datagen = ImageDataGenerator(rescale=1./255)
@@ -52,7 +51,7 @@ test_generator = test_datagen.flow_from_directory(
         batch_size=32,
         class_mode='binary')
 
-model.fit_generator(
+classifier.fit_generator(
         train_generator,
         steps_per_epoch=6400,
         epochs=32,
