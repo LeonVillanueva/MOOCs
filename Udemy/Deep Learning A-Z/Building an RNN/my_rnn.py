@@ -32,3 +32,9 @@ print (len(training_set_norm))
 for i in range (60, len(training_set_norm)):
     X_train.append (training_set_norm[i-60:i,0])
     y_train.append (training_set_norm[i, 0])
+    
+X_train, y_train = np.array (X_train), np.array (y_train)
+
+n_id = 1
+
+X_train = np.reshape (X_train, (X_train.shape[0], X_train.shape[1], n_id))
