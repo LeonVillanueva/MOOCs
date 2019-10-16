@@ -56,9 +56,26 @@ regressor.add (Dropout (0.2))
 regressor.add (LSTM (units=50))
 regressor.add (Dropout (0.2))
 
-regressor.add (Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu'))
-regressor.add (Dropout (0.2))
-regressor.add (Dense(units = 1, kernel_initializer = 'uniform', activation = 'relu'))
-regressor.compile (optimizer = 'adam', loss = 'mean_squared_error', metrics = ['accuracy'])
+# regressor.add (Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu'))
+# regressor.add (Dropout (0.2))
 
-regressor.fit (X_train, y_train)
+regressor.add (Dense(units = 1, kernel_initializer = 'uniform'))
+regressor.compile (optimizer = 'adam', loss = 'mean_squared_error')
+
+# regressor.summary ()
+regressor.fit (X_train, y_train, epochs=100, batch_size=32)
+
+# predictions
+dataset_test = pd.read_csv('Google_Stock_Price_Test.csv')
+actual_price = dataset_test.iloc[:, 1:2].values
+
+
+
+X_test = []
+y_train = []
+
+print (len(training_set_norm))
+
+for i in range (60, len(training_set_norm)):
+    X_train.append (training_set_norm[i-60:i,0])
+    y_train.append (training_set_norm[i, 0])
