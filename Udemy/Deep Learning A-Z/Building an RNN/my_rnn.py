@@ -58,24 +58,45 @@ regressor.add (Dropout (0.2))
 
 # regressor.add (Dense(units = 128, kernel_initializer = 'uniform', activation = 'relu'))
 # regressor.add (Dropout (0.2))
-
 regressor.add (Dense(units = 1, kernel_initializer = 'uniform'))
-regressor.compile (optimizer = 'adam', loss = 'mean_squared_error')
+regressor.compile (optimizer = 'adam', loss = 'mean_squared_error', metrics = ['accuracy'])
 
-# regressor.summary ()
 regressor.fit (X_train, y_train, epochs=100, batch_size=32)
 
-# predictions
 dataset_test = pd.read_csv('Google_Stock_Price_Test.csv')
 actual_price = dataset_test.iloc[:, 1:2].values
 
+dataset_total = pd.concat((dataset_train['Open'], dataset_test['Open']), axis = 0)
 
+# from most needed 2017 minus 60 to end of set
 
+inputs = dataset_total[len(dataset_total) - len(dataset_test) - 60:].values
+inputs = inputs.reshape(-1,1)
+inputs = sc.transform(inputs)
 X_test = []
-y_train = []
 
-print (len(training_set_norm))
+# only 20 financial days
 
-for i in range (60, len(training_set_norm)):
-    X_train.append (training_set_norm[i-60:i,0])
-    y_train.append (training_set_norm[i, 0])
+for i in range(60, 80):
+    X_test.append(inputs[i-60:i, 0])
+    
+X_test = np.array (X_test)
+
+X_test = np.reshape (X_test, (X_test.shape[0], X_test.shape[1], n_id))
+
+predict_price = regressor.predict (X_test)
+
+# unscale
+
+predict_price = sc.inverse_transform (predict_price)
+
+# visualization
+
+plt.plot (actual_price, color='red', label='$GOOG actual')
+plt.plot (predict_price, linestyle=':', color='blue', label='$GOOG model predicted')
+plt.title ('Google Stock Price Prediction')
+plt.xlabel ('Time')
+plt.ylabel ('Price')
+plt.legend ()
+
+plt.show ()
