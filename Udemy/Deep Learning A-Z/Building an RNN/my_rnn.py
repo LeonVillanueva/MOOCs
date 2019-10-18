@@ -61,7 +61,7 @@ regressor.add (Dropout (0.2))
 regressor.add (Dense(units = 1, kernel_initializer = 'uniform'))
 regressor.compile (optimizer = 'adam', loss = 'mean_squared_error', metrics = ['accuracy'])
 
-regressor.fit (X_train, y_train, epochs=100, batch_size=32)
+regressor.fit (X_train, y_train, epochs=120, batch_size=16)
 
 dataset_test = pd.read_csv('Google_Stock_Price_Test.csv')
 actual_price = dataset_test.iloc[:, 1:2].values
