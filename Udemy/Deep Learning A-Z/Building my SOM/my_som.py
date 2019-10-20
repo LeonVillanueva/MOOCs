@@ -31,3 +31,17 @@ som = MiniSom (x=10, y=10, input_len=X_norm.shape[1])
 som.random_weights_init(X_norm)
 som.train_random (X_norm, 100)
 
+from pylab import bone, pcolor, colorbar, plot, show
+bone()
+pcolor(som.distance_map().T)
+colorbar()
+markers = ['3', 'o']
+colors = ['r', 'g']
+
+for i, x in enumerate (X_norm):
+    w = som.winner (x)
+    plot(w[0]+0.5,w[1]+0.5, markers[y[i]], markeredgecolor=colors[y[i]], 
+         markerfacecolor='None', markersize=8, markeredgewidth=1)
+        # +0.5 centering
+        
+show()
