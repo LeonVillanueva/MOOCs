@@ -22,3 +22,12 @@ y = dataset.iloc[:, -1].values
 from sklearn.preprocessing import MinMaxScaler
 sc = MinMaxScaler(feature_range = (0, 1))
 X_norm = sc.fit_transform (X)
+
+# miniSOM
+from minisom import MiniSom
+som = MiniSom (x=10, y=10, input_len=X_norm.shape[1])
+
+# weight initialization
+som.random_weights_init(X_norm)
+som.train_random (X_norm, 100)
+
