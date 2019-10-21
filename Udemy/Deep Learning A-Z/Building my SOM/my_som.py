@@ -45,3 +45,9 @@ for i, x in enumerate (X_norm):
         # +0.5 centering
         
 show()
+
+mappings = som.win_map(X_norm)
+frauds = np.concatenate((mappings[(2,2)], mappings[(5,7)]), axis = 0)
+frauds = sc.inverse_transform(frauds)
+
+print (frauds[:,0])
