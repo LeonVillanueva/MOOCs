@@ -1,7 +1,7 @@
 # hybird supervised (deep learning) and unsupervised (SOM)
 
 """
-Created on Sat Oct 19 21:41:29 2019
+Created on Sat Oct 22 21:41:29 2019
 @author: FartherSkies
 """
 
@@ -47,6 +47,53 @@ for i, x in enumerate (X_norm):
 show()
 
 mappings = som.win_map(X_norm)
-frauds = np.concatenate((mappings[(2,2)], mappings[(5,7)]), axis = 0)
+frauds = mappings[(8,4)]
 frauds = sc.inverse_transform(frauds)
 
+frauds_list = frauds[:,0]
+len (frauds_list)
+# create a dependent variable from the SOM
+
+customers = dataset.iloc[:, 1:].values
+is_fraud = np.zeros (customers.shape[0])
+
+for i in range (customers.shape[0]):
+    if dataset.iloc[i,0] in frauds_list:
+        is_fraud[i] = 1.
+
+
+'''
+from ANN.py
+'''
+
+# Feature Scaling
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler ()
+X_train = sc.fit_transform(customers)
+
+# Importing the Keras libraries and packages
+import keras
+from keras.models import Sequential # required for initialization
+from keras.layers import Dense
+
+# Initialising the ANN
+classifier = Sequential()
+
+# Adding the input layer and the first hidden layer
+classifier.add(Dense(units = 3, kernel_initializer = 'uniform', activation = 'relu', input_dim = X_train.shape[1]))
+
+# Adding the output layer
+classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
+
+# Compiling the ANN
+classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+ 
+'''   
+https://towardsdatascience.com/advanced-keras-constructing-complex-custom-losses-and-metrics-c07ca130a618
+'''
+
+# Fitting the ANN to the Training set
+classifier.fit(X_train, is_fraud, batch_size = 2, epochs = 3)
+
+# Predicting the Test set results
+y_pred = classifier.predict(X_test)
