@@ -96,4 +96,7 @@ https://towardsdatascience.com/advanced-keras-constructing-complex-custom-losses
 classifier.fit(X_train, is_fraud, batch_size = 2, epochs = 3)
 
 # Predicting the Test set results
-y_pred = classifier.predict(X_test)
+y_pred = classifier.predict(customers)
+
+y_pred = np.concatenate(dataset.iloc[:,0:1], y_pred, axis=1) # make into the same array dimension -> 2D array
+y_pred = y_pred[y_pred[:,1].argsort()]
