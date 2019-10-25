@@ -25,8 +25,6 @@ training_set = np.array (training_set, dtype='int')
 test_set = pd.read_csv ('ml-100k/u1.test', delimiter='\t')
 test_set = np.array (test_set, dtype='int')
 
-# of users and movies
-
 nb_movies = int (max (max (training_set[:,1]), max(test_set[:,1])))
 nb_users = int (max (max (training_set[:,0]), max(test_set[:,0])))
 
@@ -45,7 +43,25 @@ def convert (data):
 	return new_data
 
 training_set = convert (training_set)	
-test_set = convert (test_set)	
+test_set = convert (test_set)
 
+# convert for pytorch
 
-		
+torch_train = torch.FloatTensor (training_set)
+torch_test = torch.FloatTensor (test_set)
+
+# convert to binary 0/1 = dislike/like
+# with -1 not watched
+
+torch_train[torch_train == 0] = -1
+torch_train[torch_train == 1] = 0
+torch_train[torch_train == 2] = 0
+torch_train[torch_train >= 3] = 1
+
+torch_test[torch_test == 0] = -1
+torch_test[torch_test == 1] = 0
+torch_test[torch_test == 2] = 0
+torch_test[torch_test >= 3] = 1
+
+class RBM():
+    
