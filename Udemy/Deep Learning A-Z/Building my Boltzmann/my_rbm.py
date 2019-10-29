@@ -77,6 +77,7 @@ class RBM():
         return p_v_given_h, torch.bernoulli(p_v_given_h)
     def train(self, v0, vk, ph0, phk):
         # self.W += torch.mm(v0.t(), ph0) - torch.mm(vk.t(), phk)
+        # commented out, old python code with dimensionality issues
         self.b += torch.sum((v0 - vk), 0)
         self.a += torch.sum((ph0 - phk), 0)
 nv = len(training_set[0])
@@ -93,7 +94,7 @@ for epoch in range (1, nb_epoch+1):
     counter = 0. # normalize the train loss, float type
     for id_user in range (0, nb_users - batch_size, batch_size):
         vk = training_set [id_user:id_user+batch_size] # input will be updated
-        v0 = training_set [id_user:id_user+batch_size] # pre-rated movies 
+        v0 = training_set [id_user:id_user+batch_size] # pre-rated movies
         # comma underscore = first element only?
         ph0,_ = rbm.sample_h (v0)
         for k in range (10):
@@ -105,23 +106,19 @@ for epoch in range (1, nb_epoch+1):
         train_loss += torch.mean(torch.abs(v0[v0>=0] - vk[v0>=0])) # only existing ratings
         counter += 1
         print ('epoch : '+str(epoch)+'; loss : '+str(train_loss/counter))
-  
-'''      
-nb_epoch = 10
-for epoch in range(1, nb_epoch + 1):
-    train_loss = 0
-    s = 0.
-    for id_user in range(0, nb_users - batch_size, batch_size):
-        vk = training_set[id_user:id_user+batch_size]
-        v0 = training_set[id_user:id_user+batch_size]
-        ph0,_ = rbm.sample_h(v0)
-        for k in range(10):
-            _,hk = rbm.sample_h(vk)
-            _,vk = rbm.sample_v(hk)
-            vk[v0<0] = v0[v0<0]
-        phk,_ = rbm.sample_h(vk)
-        rbm.train(v0, vk, ph0, phk)
-        train_loss += torch.mean(torch.abs(v0[v0>=0] - vk[v0>=0]))
-        s += 1.
-    print('epoch: '+str(epoch)+' loss: '+str(train_loss/s))
-'''
+
+# testing
+test_loss = 0
+counter = 0.
+
+for id_user in range (nb_users):
+    v = training_set [id_user:id_user+1] # activate the neurons correctly 
+    vt = test_set [id_user:id_user+1] #id_users+1, for dimenstionality
+    # no need to multiple train - markov chain training, weights activated > one shot
+    if len (vt[vt>=0]) > 0: # make sure only those with ratings
+                            # blind walk
+        _,h = rbm.sample_h (v)
+        _,v = rbm.sample_v (h)
+        test_loss += torch.mean(torch.abs(vt[vt>=0] - v[vt>=0])) # only existing ratings
+        counter += 1
+print ('loss :' + str(test_loss/counter))
