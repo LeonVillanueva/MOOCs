@@ -50,3 +50,14 @@ def convert (data):
 torch_train = convert (training_set)
 torch_test = convert (test_set)
 
+# to torch tensor
+torch_train = torch.FloatTensor (torch_train)
+torch_test = torch.FloatTensor (torch_test)
+
+# autoencoder class : {f(x)}->object
+# nn(parent) > ae_class(child) >> inheritance
+
+class Stacked_AE (nn.Module):
+    def __init__(self,):
+        super(Stacked_AE, self).__init__
+        # all functions and inherited
