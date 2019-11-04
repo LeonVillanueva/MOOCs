@@ -61,3 +61,13 @@ class Stacked_AE (nn.Module):
     def __init__(self,):
         super(Stacked_AE, self).__init__
         # all functions and inherited
+        
+        # encoding
+        self.fc1 = nn.Linear(nb_movies, 30)
+        self.fc2 = nn.Linear(30, 10)
+        # decoding
+        self.fc3 = nn.Linear(10, 30)
+        self.fc4 = nn.Linear(30, nb_movies)
+        
+        self.activation = nn.Sigmoid()
+    
