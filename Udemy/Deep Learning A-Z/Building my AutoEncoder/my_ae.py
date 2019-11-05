@@ -59,7 +59,7 @@ torch_test = torch.FloatTensor (torch_test)
 
 class Stacked_AE (nn.Module):
     def __init__(self,):
-        super(Stacked_AE, self).__init__
+        super(Stacked_AE, self).__init__()
         # all functions and inherited
         
         # encoding
@@ -74,4 +74,10 @@ class Stacked_AE (nn.Module):
         x = self.activation(self.fc1(x))
         x = self.activation(self.fc2(x))
         x = self.activation(self.fc3(x))
-        x = self.activation(self.fc4(x))
+        x = self.fc4(x)
+        return x
+
+sae = Stacked_AE()
+criterion = nn.MSELoss()
+optimizer = optim.RMSprop(sae.parameters(), lr=0.01, weight_decay=0.5)
+
