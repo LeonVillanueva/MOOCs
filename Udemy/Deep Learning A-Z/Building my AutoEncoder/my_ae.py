@@ -70,4 +70,8 @@ class Stacked_AE (nn.Module):
         self.fc4 = nn.Linear(30, nb_movies)
         
         self.activation = nn.Sigmoid()
-    
+    def forward (self, x):
+        x = self.activation(self.fc1(x))
+        x = self.activation(self.fc2(x))
+        x = self.activation(self.fc3(x))
+        x = self.activation(self.fc4(x))
