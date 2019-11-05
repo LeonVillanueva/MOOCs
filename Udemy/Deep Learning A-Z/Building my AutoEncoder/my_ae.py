@@ -81,3 +81,15 @@ sae = Stacked_AE()
 criterion = nn.MSELoss()
 optimizer = optim.RMSprop(sae.parameters(), lr=0.01, weight_decay=0.5)
 
+# training
+
+nb_epochs = 200
+for epoch in range (1, nb_epochs+1):
+    train_loss = 0
+    s = 0. # how many users acutally rated
+    for id_user in range (nb_users):
+        input = Variable (torch_train [id_user]).unsqueeze(0)
+            # will create a batch
+        target = input.clone()
+        if torch.sum (target.data>0) > 0:
+            output = sae (input)
