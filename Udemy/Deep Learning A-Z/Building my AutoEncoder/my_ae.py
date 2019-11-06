@@ -93,3 +93,20 @@ for epoch in range (1, nb_epochs+1):
         target = input.clone()
         if torch.sum (target.data>0) > 0:
             output = sae (input)
+            target.require_grad = False
+            output[target == 0] =  0
+            loss = criterion (output, target)
+            mean_corrector = nb_movies/float(torch.sum(target.data>0) + 1e-10)
+                # stability
+            loss.backward()
+            train_loss += np.sqrt(loss.data * mean_corrector)
+                # index of error
+            s += 1.
+            optimizer.step()
+                # update weights
+                # backward = direction of udpate
+                # optimizer = intensity of update
+    print ('epoch: '+str(epoch)+'; '+'loss: '+str(train_loss/s))
+    
+    # given that target = 0, we're not using loss.zero_grad
+        # https://stackoverflow.com/questions/44732217/why-do-we-need-to-explicitly-call-zero-grad
