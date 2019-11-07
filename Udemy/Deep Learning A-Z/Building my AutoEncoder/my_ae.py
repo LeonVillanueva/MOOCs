@@ -70,16 +70,19 @@ class Stacked_AE (nn.Module):
         self.fc4 = nn.Linear(30, nb_movies)
         
         self.activation = nn.Sigmoid()
+        self.dropout = nn.Dropout(0.3)
     def forward (self, x):
         x = self.activation(self.fc1(x))
+        x = self.dropout (x)
         x = self.activation(self.fc2(x))
+        # x = self.dropout (x)
         x = self.activation(self.fc3(x))
         x = self.fc4(x)
         return x
 
 sae = Stacked_AE()
 criterion = nn.MSELoss()
-optimizer = optim.RMSprop(sae.parameters(), lr=0.01, weight_decay=0.5)
+optimizer = optim.RMSprop(sae.parameters(), lr=0.015, weight_decay=0.5)
 
 # training
 
@@ -98,6 +101,8 @@ for epoch in range (1, nb_epochs+1):
             loss = criterion (output, target)
             mean_corrector = nb_movies/float(torch.sum(target.data>0) + 1e-10)
                 # stability
+            
+            # optimizer.zero_grad() - causes no change, mapping?
             loss.backward()
             train_loss += np.sqrt(loss.data * mean_corrector)
                 # index of error
