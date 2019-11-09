@@ -139,8 +139,8 @@ print ('test loss: '+str(test_loss/s))
 # single item prediction
 
 target_user_id = 3
-target_movie_id = 327
-input = Variable(training_set[target_user_id-1]).unsqueeze(0)
+target_movie_id = 345
+input = Variable(torch_train[target_user_id-1]).unsqueeze(0)
 output = sae(input)
 output_numpy = output.data.numpy()
 print (''+ str(output_numpy[0,target_movie_id-1]))
