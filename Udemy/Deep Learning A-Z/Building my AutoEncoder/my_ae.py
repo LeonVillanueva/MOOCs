@@ -75,7 +75,7 @@ class Stacked_AE (nn.Module):
         self.dropout = nn.Dropout(0.5)
     def forward (self, x):
         x = self.activation(self.fc1(x))
-        # x = self.dropout (x)
+        x = self.dropout (x)
         x = self.activation(self.fc2(x))
         # x = self.dropout (x)
         x = self.activation(self.fc3(x))
@@ -84,7 +84,7 @@ class Stacked_AE (nn.Module):
 
 sae = Stacked_AE()
 criterion = nn.MSELoss()
-optimizer = optim.RMSprop(sae.parameters(), lr=0.015, weight_decay=0.5)
+optimizer = optim.RMSprop(sae.parameters(), lr=0.02, weight_decay=0.5)
 
 # training
 
@@ -132,33 +132,16 @@ for id_user in range (nb_users):
         output[target == 0] =  0
         loss = criterion (output, target)
         mean_corrector = nb_movies/float(torch.sum(target.data>0) + 1e-10)
-            # stability
-        
-        # optimizer.zero_grad() - causes no change, mapping?
-        # loss.backward() - no weights updated
         test_loss += np.sqrt(loss.data * mean_corrector)
-            # index of error
         s += 1.
-        # optimizer.step()
-            # update weights
-            # backward = direction of udpate
-            # optimizer = intensity of update
-print ('test loss: '+str(train_loss/s))
+print ('test loss: '+str(test_loss/s))
 
-'''
-test_loss = 0
-s = 0.
-for id_user in range(nb_users):
-    input = Variable(training_set[id_user]).unsqueeze(0)
-    target = Variable(test_set[id_user])
-    if torch.sum(target.data > 0) > 0:
-        output = sae(input)
-        target.require_grad = False
-        output[target == 0] = 0
-        loss = criterion(output, target)
-        mean_corrector = nb_movies/float(torch.sum(target.data > 0) + 1e-10)
-        test_loss += np.sqrt(loss.data[0]*mean_corrector)
-        s += 1.
-print('test loss: '+str(test_loss/s))
-'''
+# single item prediction
+
+target_user_id = 3
+target_movie_id = 327
+input = Variable(training_set[target_user_id-1]).unsqueeze(0)
+output = sae(input)
+output_numpy = output.data.numpy()
+print (''+ str(output_numpy[0,target_movie_id-1]))
     
