@@ -16,7 +16,11 @@ y = dataset.iloc[:, 4].values
 
 # Encoding categorical data
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-labelencoder = LabelEncoder()
-X[:, 3] = labelencoder.fit_transform(X[:, 3])
-onehotencoder = OneHotEncoder(categorical_features = [3])
-X = onehotencoder.fit_transform(X).toarray()
+    # can skip to OneHot immidiately > LabelEncoder deprecated
+    # labelencoder = LabelEncoder()
+    # X[:, 3] = labelencoder.fit_transform()
+onehotencoder = OneHotEncoder()
+X_oh = onehotencoder.fit_transform(X[:,3:4]).toarray()
+X_oh = X_oh[:,:-1]
+X = np.concatenate ((X[:,:3],X_oh), axis=1)
+
