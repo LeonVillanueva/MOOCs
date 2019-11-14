@@ -35,3 +35,15 @@ regressor.fit(X_train, y_train)
 y_pred = regressor.predict(X_test)
 
 print (y_pred)
+print (regressor.coef_)
+
+# p-vales
+# https://www.ritchieng.com/machine-learning-evaluate-linear-regression-model/
+# https://stackoverflow.com/questions/22306341/python-sklearn-how-to-calculate-p-values
+# https://scikit-learn.org/stable/modules/classes.html#module-sklearn.feature_selection
+
+from sklearn.metrics import r2_score
+from sklearn.metrics import mean_squared_error
+
+print (r2_score(y_test, y_pred))
+print (mean_squared_error(y_test, y_pred))
