@@ -51,4 +51,7 @@ print (mean_squared_error(y_test, y_pred))
 
 import statsmodels.formula.api as sm
 
-X_sm_train = np.concatenate (np.ones ((X_train.shape[0],1), dtype=int), X_train, axis=0)
+X_sm = np.append (arr=np.ones((X.shape[0], 1)).astype(int), values=X, axis=1)
+X_sm_train, X_sm_test, y_sm_train, y_sm_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
+X_opt = X_sm[:,[0,1,2,3,4,5]]
