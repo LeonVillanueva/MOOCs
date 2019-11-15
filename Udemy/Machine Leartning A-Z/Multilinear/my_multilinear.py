@@ -22,7 +22,8 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 onehotencoder = OneHotEncoder()
 X_oh = onehotencoder.fit_transform(X[:,3:4]).toarray()
 X_oh = X_oh[:,:-1]
-X = np.concatenate ((X[:,:3],X_oh), axis=1)
+# switched to match
+X = np.concatenate ((X_oh, X[:,:3]), axis=1)
 
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
@@ -47,3 +48,7 @@ from sklearn.metrics import mean_squared_error
 
 print (r2_score(y_test, y_pred))
 print (mean_squared_error(y_test, y_pred))
+
+import statsmodels.formula.api as sm
+
+X_sm_train = np.concatenate (np.ones ((X_train.shape[0],1), dtype=int), X_train, axis=0)
