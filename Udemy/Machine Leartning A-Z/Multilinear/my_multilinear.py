@@ -15,7 +15,7 @@ X = dataset.iloc[:, :-1].values
 y = dataset.iloc[:, 4].values
 
 # Encoding categorical data
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder #, LabelEncoder
     # can skip to OneHot immidiately > LabelEncoder deprecated
     # labelencoder = LabelEncoder()
     # X[:, 3] = labelencoder.fit_transform()
@@ -49,9 +49,19 @@ from sklearn.metrics import mean_squared_error
 print (r2_score(y_test, y_pred))
 print (mean_squared_error(y_test, y_pred))
 
-import statsmodels.formula.api as sm
+import statsmodels.api as sm
+# import statsmodels.regression.linear_model as lm
 
-X_sm = np.append (arr=np.ones((X.shape[0], 1)).astype(int), values=X, axis=1)
-X_sm_train, X_sm_test, y_sm_train, y_sm_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+ones = np.ones ((X.shape[0],1), dtype=float)
+X_sm = np.append (ones, X, axis=1).astype('float64') 
+X_opt = X_sm[:,[0,3]]
 
-X_opt = X_sm[:,[0,1,2,3,4,5]]
+
+print (X_opt.shape, y.shape)
+print (X_opt.dtype, y.dtype)
+
+model = sm.OLS(y, X_opt, hasconst=True)
+results = model.fit()
+
+print (max(results.pvalues))
+np.argmax(results.pvalues)
