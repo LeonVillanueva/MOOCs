@@ -54,7 +54,7 @@ import statsmodels.api as sm
 
 ones = np.ones ((X.shape[0],1), dtype=float)
 X_sm = np.append (ones, X, axis=1).astype('float64') 
-X_opt = X_sm[:,[0,3]]
+X_opt = X_sm[:,[0,1,2,3,4,5]]
 
 
 print (X_opt.shape, y.shape)
@@ -65,3 +65,16 @@ results = model.fit()
 
 print (max(results.pvalues))
 np.argmax(results.pvalues)
+
+# automatic backstep
+
+X_vars = [0,1,2,3,4,5]
+sl = 0.1
+
+while max (results.pvalues) > sl:
+    X_vars.pop (np.argmax(results.pvalues))
+    model = sm.OLS(y, X_sm[:,X_vars], hasconst=True)
+    results = model.fit()
+
+print (X_vars)
+print(results.summary())
