@@ -38,3 +38,18 @@ X_poly = poly_reg.fit_transform (X)
 
 lin_reg_2 = LinearRegression()
 lin_reg_2.fit(X_poly, y)
+
+plt.scatter (X, y, color='green')
+plt.plot (X, lin_reg.predict(X), color='red')
+plt.plot (X, lin_reg_2.predict(X_poly), color='blue')
+
+plt.xlabel ('Position Level')
+plt.ylabel ('Salary')
+
+from sklearn.metrics import mean_squared_error
+
+print ('Linear: '+ str (mean_squared_error(y, lin_reg.predict(X))) )
+print ('Poly: '+ str (mean_squared_error(y, lin_reg_2.predict(X_poly))) )
+
+print (str (mean_squared_error(y, lin_reg.predict(X) >
+                               mean_squared_error(y, lin_reg_2.predict(X_poly)))))
