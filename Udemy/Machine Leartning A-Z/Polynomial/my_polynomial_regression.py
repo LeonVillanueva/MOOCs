@@ -33,7 +33,7 @@ lin_reg = LinearRegression()
 lin_reg.fit(X, y)
 
 from sklearn.preprocessing import PolynomialFeatures
-poly_reg = PolynomialFeatures (degree=2)
+poly_reg = PolynomialFeatures (degree=3)
 X_poly = poly_reg.fit_transform (X)
 
 lin_reg_2 = LinearRegression()
