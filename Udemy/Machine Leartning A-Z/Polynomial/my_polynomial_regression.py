@@ -33,7 +33,7 @@ lin_reg = LinearRegression()
 lin_reg.fit(X, y)
 
 from sklearn.preprocessing import PolynomialFeatures
-poly_reg = PolynomialFeatures (degree=3)
+poly_reg = PolynomialFeatures (degree=4)
 X_poly = poly_reg.fit_transform (X)
 
 lin_reg_2 = LinearRegression()
@@ -45,7 +45,7 @@ plt.plot (X, lin_reg_2.predict(X_poly), color='blue')
 
 plt.xlabel ('Position Level')
 plt.ylabel ('Salary')
-
+plt.show()
 from sklearn.metrics import mean_squared_error
 
 print ('Linear: '+ str (mean_squared_error(y, lin_reg.predict(X))) )
@@ -53,3 +53,10 @@ print ('Poly: '+ str (mean_squared_error(y, lin_reg_2.predict(X_poly))) )
 
 print (str (mean_squared_error(y, lin_reg.predict(X) >
                                mean_squared_error(y, lin_reg_2.predict(X_poly)))))
+
+'''final prediction'''
+
+years = [[6.5]]
+
+lin_reg.predict (years)
+lin_reg_2.predict (poly_reg.fit_transform(years))
