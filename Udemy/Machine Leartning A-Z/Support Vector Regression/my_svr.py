@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Nov 21 14:19:18 2019
-
 @author: FartherSkies
 """
 
@@ -37,3 +36,6 @@ y_pred = regressor.predict ([[6.5]])
 plt.scatter (X, y, color='green')
 plt.plot (X, regressor.predict(X), color='red')
 plt.title ('SVR')
+plt.show()
+
+y_pred_inverse = sc_y.inverse_transform (y_pred)
