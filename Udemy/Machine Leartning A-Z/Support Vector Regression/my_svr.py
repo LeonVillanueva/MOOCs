@@ -32,7 +32,7 @@ from sklearn.svm import SVR
 regressor = SVR(kernel = 'rbf')
 regressor.fit(X, y)
 
-y_pred = regressor.predict ([[6.5]])
+y_pred = regressor.predict (sc_X.transform([[6.5]]))
 plt.scatter (X, y, color='green')
 plt.plot (X, regressor.predict(X), color='red')
 plt.title ('SVR')
