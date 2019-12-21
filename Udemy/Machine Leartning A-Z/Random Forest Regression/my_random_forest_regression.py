@@ -18,7 +18,7 @@ X = dataset.iloc[:, 1:2].values
 y = dataset.iloc[:, 2].values
 
 from sklearn.ensemble import RandomForestRegressor
-regressor = RandomForestRegressor(n_estimators = 10, random_state = 0)
+regressor = RandomForestRegressor(n_estimators = 100, random_state = 0)
 regressor.fit(X, y)
 
 # Predicting a new result
@@ -33,3 +33,5 @@ plt.title('Truth or Bluff (Random Forest Regression)')
 plt.xlabel('Position level')
 plt.ylabel('Salary')
 plt.show()
+
+print (y_pred)
