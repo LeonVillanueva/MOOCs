@@ -53,3 +53,14 @@ print (total_reward) # eventually the algorithm converges into the highest conve
 
 from statistics import mode 
 print ('AD Number ' + str (mode (ads_selected)+1) + ' has the highest click rate.')
+
+
+n, bins, patches = plt.hist(ads_selected, bins=d, align='left', color='#95d0fc')
+patches[mode (ads_selected)].set_fc('#ff474c')
+
+plt.title('Histogram of ads selections')
+plt.xlabel('Ads')
+plt.ylabel('Number of times each ad was selected')
+
+
+plt.show()
