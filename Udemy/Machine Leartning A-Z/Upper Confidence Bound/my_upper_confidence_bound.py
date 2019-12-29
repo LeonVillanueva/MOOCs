@@ -52,4 +52,4 @@ for n in range (0, N): # per round
 print (total_reward) # eventually the algorithm converges into the highest conversion rate AD
 
 from statistics import mode 
-print ('AD Number ' + str (mode (ads_selected)) + ' has the highest click rate.')
+print ('AD Number ' + str (mode (ads_selected)+1) + ' has the highest click rate.')
