@@ -38,9 +38,18 @@ for n in range (0, N): # per round
             # n starts at zero
             # 3/2 assumes bell curve
             upper_bound = average_reward + delta_i
-        else:
+        else: # this is a trick, to make sure the first 10 selections are the first 10, give us info
             upper_bound = 1e400
         if upper_bound > max_upper_bound:
             max_upper_bound = upper_bound
             ad = i
-            ads_selected.append (ad)
+    ads_selected.append (ad)
+    numbers_of_selections [ad] += 1
+    reward = dataset.values [n, ad]
+    sums_of_rewards [ad] += reward
+    total_reward += reward
+
+print (total_reward) # eventually the algorithm converges into the highest conversion rate AD
+
+from statistics import mode 
+print ('AD Number ' + str (mode (ads_selected)) + ' has the highest click rate.')
