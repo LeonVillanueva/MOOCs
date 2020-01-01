@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jan  1 17:43:21 2020
-
-@author: FartherSkies
-"""
-
 # PCA
 
 # Importing the libraries
@@ -19,7 +12,7 @@ y = dataset.iloc[:, -1].values
 
 # Splitting the dataset into the Training set and Test set
 from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 0)
 
 # Feature Scaling
 from sklearn.preprocessing import StandardScaler
@@ -27,21 +20,18 @@ sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
-# PCA application
+# Applying PCA
 from sklearn.decomposition import PCA
-pca = PCA(n_components=2)
+pca = PCA(n_components = 2)
 X_train = pca.fit_transform(X_train)
-X_test = pca.fit_transform(X_test)
+X_test = pca.transform(X_test)
+explained_variance = pca.explained_variance_ratio_
 
-#cumulative explained variance
-explained_var = pca.explained_variance_ratio_
-print (explained_var)
-
-# from logistic regression file
+print (explained_variance)
 
 # Fitting Logistic Regression to the Training set
 from sklearn.linear_model import LogisticRegression
-classifier = LogisticRegression(random_state = 0)
+classifier = LogisticRegression(random_state = 42)
 classifier.fit(X_train, y_train)
 
 # Predicting the Test set results
