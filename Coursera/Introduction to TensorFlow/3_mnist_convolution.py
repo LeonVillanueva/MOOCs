@@ -45,9 +45,10 @@ class myCallback (tf.keras.callbacks.Callback):
             tf.keras.layers.MaxPooling2D (2, 2),
             tf.keras.layers.Conv2D (64, 3, activation='relu'),
             tf.keras.layers.MaxPooling2D (2, 2),
+            tf.keras.layers.BatchNormalization (),
             tf.keras.layers.Flatten (),
             tf.keras.layers.Dense (128, activation='relu'),
-            tf.keras.layers.Dropout (0.25),
+            tf.keras.layers.Dropout (0.20),
             tf.keras.layers.Dense (n, activation='softmax')
         ]
     
