@@ -18,7 +18,7 @@ q-value : state / action
 	5. update Q value
 		(Q(s),a) += ALPHA * TD(s,a)
 
-deep q-learning
+deep q-learning (input > q-target, and backprop)
 
 	only on discrete cases
 	
@@ -35,6 +35,32 @@ deep q-learning
 			LOSS : 1/2 SUM [R(s,a) + LAMBDA * MAX (Q(s)t+1,a) - (Q(s),a)]^2 = 1/2 SUM TD (s,a)^2
 			
 			Back propogate
-			
+
+policy gradient (neural network states > action)
+
+	PIo = policy, o = phi
+	R = SUM LAMBDA^(i-t) r[s,a]
+		^(i-t) : discount factor
+	
+	
+	GOAL : Maxmize expedted return
+	
+	Compute the gradient of the policy return
+		DELTA J(o)
+		ot+1 += ot ALPHA * DELTA J(o)
+
+actor-critic (states > actions, actions + state > q-values)
+
+	2 models working at the same time
+	
+taxonomy
+
+	model based, model free : simulated (predicted) environment vs data from environment itself
+	value based, policy based : update using q-value (intermidiary), directly update weights of policy (actions taken)
+	off-policy, on-policy : learn from past data (memory), learn only on new data 
+	
+	
+
+	
 	
 '''
