@@ -58,9 +58,52 @@ taxonomy
 	model based, model free : simulated (predicted) environment vs data from environment itself
 	value based, policy based : update using q-value (intermidiary), directly update weights of policy (actions taken)
 	off-policy, on-policy : learn from past data (memory), learn only on new data 
-	
-	
+'''
 
+'''
+TD3 : Twin Delayed Deep Dertiministic Polocy Gradient
+
+	solution to continuous space of actions
 	
+		q-values alone can't understand infinte (continuous) actions
+		include actor critic
+		
+		learn both policy and q-values that are optimal
+		
+		twin : two critics
+		
+			actor (states >> policy)
+			critic1 (states + action >> q-values)
+			critic2 (states + action >> q-values)
+
+	explore-exploit 
 	
+	transition (LAST STATE, NEXT STATE, ACTION, REWARD) > get the next action from next state
+		(s, s', a, r)
+	
+	Q learning
+	
+	1. initialize M (amount of transitions stored)
+	2. actor model neural network
+	   actor target neural network
+	3a. corresponding two critic models for (2)
+	3b. random explore for making transitions
+	4. sample transitions
+	5. from transition get s'
+	6. add gausian noise for next a, and clamp within a range
+	7. two critic models (4 neural network)
+		Qt1(s',a')
+		Qt2(s',a')
+	8. keep the minimum of (7), approximation of the next state s'
+		prevent too optimistic estimate = stability
+		min(Qt1, Qt2)
+	9. Qt = r + GAMMA * min(Qt1, Qt2)
+		GAMMA = discount factor
+	10. Q1(s,a)
+	    Q2(s,a)
+		
+		compare (9)
+	11. critic loss = MSE_loss(Q1-Qt) + MSE_loss(Q2-Qt)
+	12. back propogate critic loss (11) and update parameter weights
+
 '''
