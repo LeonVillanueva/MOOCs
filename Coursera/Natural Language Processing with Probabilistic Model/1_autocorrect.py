@@ -102,3 +102,65 @@ def replace_letter(word, verbose=False):
     if verbose: print(f"Input word = {word} \nsplit_l = {split_l} \nreplace_l {replace_l}")
 
     return replace_l
+
+def insert_letter(word, verbose=False):
+    letters = 'abcdefghijklmnopqrstuvwxyz'
+    insert_l = []
+    split_l = []
+
+    for char in range(len(word)):
+        L = ''.join(word[0:char])
+        R = ''.join(word[char:])
+        split_l.append ((L, R))
+
+    chars = [char for char in word]
+    alphabet = [letter for letter in letters]
+
+    for i in range(len(chars)+1):
+        for j in range(len(alphabet)):
+            insert_l.append( ''.join(chars[:i]) + alphabet[j] + ''.join(chars[i:]))
+
+    if verbose: print(f"Input word {word} \nsplit_l = {split_l} \ninsert_l = {insert_l}")
+
+    return insert_l
+
+def edit_one_letter(word, allow_switches = True):
+    edit_one_set = set()
+
+    list_a = insert_letter (word)
+    list_b = delete_letter (word)
+    list_c = switch_letter (word)
+    list_d = replace_letter (word)
+
+    edit_one_set = set (list_a+list_b+list_c+list_d)
+
+    return edit_one_set
+
+def edit_two_letters(word, allow_switches = True):
+    edit_two_set = set()
+
+    list_of_sets = []
+    first = edit_one_letter (word)
+    list_of_sets.append (first)
+    for i in list(first):
+        list_of_sets.append(edit_one_letter(i))
+
+    edit_two_set = set.union(*list_of_sets)
+
+    return edit_two_set
+
+def get_corrections(word, probs, vocab, n=2, verbose = False):
+    suggestions = []
+    n_best = []
+
+    suggestions = list((word in vocab and word)
+                       or edit_one_letter(word).intersection(vocab)
+                       or edit_two_letters(word).intersection(vocab))
+
+    n_list = [(s,probs[s]) for s in list((suggestions))]
+    n_best = sorted(n_list, key=lambda x: x[1], reverse=True)[:n]
+    suggestions = {x[0] for x in n_best}
+
+    if verbose: print("entered word = ", word, "\nsuggestions = ", suggestions)
+
+    return n_best
