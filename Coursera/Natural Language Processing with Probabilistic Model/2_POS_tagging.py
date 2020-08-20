@@ -80,8 +80,4 @@ VITERBI algorithm
         implementation notes
             be careful with indices (0 v 1)
             use log probabilities instead to overcome very small (p)
-
-
-
-
 '''
